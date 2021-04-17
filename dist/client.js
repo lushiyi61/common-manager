@@ -36,56 +36,20 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.server_update_load = exports.server_report_async = void 0;
+exports.SERVER_REQUEST = exports.post_to_server_async = exports.server_manager_start_async = exports.server_report_async = exports.get_server_by_type = exports.server_update_load = void 0;
 var common_log4js_1 = require("common-log4js");
 var path_1 = require("path");
 var logger = common_log4js_1.default.getLogger(path_1.basename(__filename));
 ///////////////////////////////////////////////////////
 var http = require("http");
-var api_1 = require("./interface/api");
-function http_post_async(host, port, path, data) {
-    // logger.debug(JSON.stringify(data).length);
-    var opt = {
-        host: host,
-        port: port,
-        path: path,
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-    };
-    return new Promise(function (resolve, reject) {
-        var req = http.request(opt, function (res) {
-            res.setEncoding("utf-8");
-            res.on("data", function (chunk) {
-                resolve(JSON.parse(chunk));
-            });
-        });
-        req.on("error", function (err) {
-            logger.warn(err.message);
-            reject({});
-        });
-        req.write(JSON.stringify(data));
-        req.end();
-    });
-}
-;
+// 依赖服务器信息
+var SERVER_MAP_INFO = new Map();
+// 本服务器信息
 var SERVER_INFO = { server_type: "", server_id: "", tick_time: 0, http_ip: "", http_port: 0, ws_ip: "", ws_port: 0, load: 0, memory: "" };
-function server_report_async(server_info, find_ip, find_port, find_tick_time) {
-    return __awaiter(this, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    Object.assign(SERVER_INFO, server_info);
-                    return [4 /*yield*/, create_async(find_ip, find_port, find_tick_time)];
-                case 1:
-                    _a.sent();
-                    return [2 /*return*/];
-            }
-        });
-    });
-}
-exports.server_report_async = server_report_async;
+/**
+ * 更新本服务负载
+ * @param load
+ */
 function server_update_load(load) {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
@@ -95,14 +59,158 @@ function server_update_load(load) {
     });
 }
 exports.server_update_load = server_update_load;
-function create_async(find_ip, find_port, find_tick_time) {
+/**
+ * HTTP post 请求接口
+ * @param host
+ * @param port
+ * @param path
+ * @param data
+ * @returns
+ */
+function http_post_async(host, port, path, data) {
+    return __awaiter(this, void 0, void 0, function () {
+        var opt;
+        return __generator(this, function (_a) {
+            opt = {
+                host: host,
+                port: port,
+                path: path,
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            };
+            return [2 /*return*/, new Promise(function (resolve, reject) {
+                    var req = http.request(opt, function (res) {
+                        res.setEncoding("utf-8");
+                        res.on("data", function (chunk) {
+                            resolve(JSON.parse(chunk));
+                        });
+                    });
+                    req.on("error", function (err) {
+                        logger.warn(err.message);
+                        reject({ code: undefined });
+                    });
+                    req.write(JSON.stringify(data));
+                    req.end();
+                })];
+        });
+    });
+}
+;
+/////////////////////////////////////////////////////////////////////////////////////////////
+/**
+ * 获取指定依赖服务的相关信息
+ * @param server_type 游戏依赖服务
+ * @returns
+ */
+function get_server_by_type(server_type) {
+    return SERVER_MAP_INFO.get(server_type);
+}
+exports.get_server_by_type = get_server_by_type;
+/**
+ * 上报本服务
+ * @param server_info 本服务信息
+ * @param manage_ip 管理服务器IP
+ * @param manage_port 管理服务器端口
+ * @param tick_time 心跳时间
+ */
+function server_report_async(server_info, manage_ip, manage_port, tick_time) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    Object.assign(SERVER_INFO, server_info);
+                    return [4 /*yield*/, create_async(manage_ip, manage_port, tick_time)];
+                case 1:
+                    _a.sent();
+                    return [2 /*return*/];
+            }
+        });
+    });
+}
+exports.server_report_async = server_report_async;
+/**
+ * 定期刷新依赖服务
+ * @param server_types
+ */
+function server_manager_start_async(server_types, manage_ip, manage_port, tick_time) {
+    return __awaiter(this, void 0, void 0, function () {
+        var _this = this;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, Promise.all(server_types.map(function (server_type) { return __awaiter(_this, void 0, void 0, function () {
+                        var findreq, server, result;
+                        return __generator(this, function (_a) {
+                            switch (_a.label) {
+                                case 0:
+                                    findreq = {
+                                        server_type: server_type
+                                    };
+                                    server = SERVER_MAP_INFO.get(server_type);
+                                    if (server) {
+                                        findreq.server_id = server.server_id;
+                                    }
+                                    return [4 /*yield*/, http_post_async(manage_ip, manage_port, exports.SERVER_REQUEST.FIND, findreq)];
+                                case 1:
+                                    result = _a.sent();
+                                    if (result.data) {
+                                        SERVER_MAP_INFO.set(server_type, result.data);
+                                    }
+                                    return [2 /*return*/];
+                            }
+                        });
+                    }); }))];
+                case 1:
+                    _a.sent();
+                    setTimeout(server_manager_start_async, tick_time, server_types, manage_ip, manage_port, tick_time);
+                    return [2 /*return*/];
+            }
+        });
+    });
+}
+exports.server_manager_start_async = server_manager_start_async;
+/**
+ * 向指定服务器，执行HTTP指令
+ * @param server_type
+ * @param cmd
+ * @param params
+ * @returns
+ */
+function post_to_server_async(server_type, cmd, params) {
+    return __awaiter(this, void 0, void 0, function () {
+        var server, result;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    server = SERVER_MAP_INFO.get(server_type);
+                    if (!server) return [3 /*break*/, 2];
+                    return [4 /*yield*/, http_post_async(server.http_ip, server.http_port, cmd, params)];
+                case 1:
+                    result = _a.sent();
+                    return [2 /*return*/, result];
+                case 2:
+                    logger.warn("该服务器未注册，类型[%s]", server_type);
+                    return [2 /*return*/, { code: undefined }];
+            }
+        });
+    });
+}
+exports.post_to_server_async = post_to_server_async;
+/**
+ * 心跳
+ * @param manage_ip 管理服务端IP
+ * @param manage_port 管理服务端端口
+ * @param tick_time
+ */
+function create_async(manage_ip, manage_port, tick_time) {
     return __awaiter(this, void 0, void 0, function () {
         var now, mem, error_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     now = Date.now();
-                    if (!(now > SERVER_INFO.tick_time + find_tick_time)) return [3 /*break*/, 4];
+                    if (!(now > SERVER_INFO.tick_time + tick_time)) return [3 /*break*/, 4];
                     SERVER_INFO.tick_time = now;
                     mem = process.memoryUsage();
                     SERVER_INFO.memory = JSON.stringify({
@@ -113,16 +221,16 @@ function create_async(find_ip, find_port, find_tick_time) {
                     _a.label = 1;
                 case 1:
                     _a.trys.push([1, 3, , 4]);
-                    return [4 /*yield*/, http_post_async(find_ip, find_port, api_1.SERVER_REQUEST.CREATE, SERVER_INFO)];
+                    return [4 /*yield*/, http_post_async(manage_ip, manage_port, exports.SERVER_REQUEST.REPORT, SERVER_INFO)];
                 case 2:
                     _a.sent();
                     return [3 /*break*/, 4];
                 case 3:
                     error_1 = _a.sent();
-                    logger.warn("cann't connect to find server. ip:[%s] port:[%s] ", find_ip, find_port);
+                    logger.warn("cann't connect to find server. ip:[%s] port:[%s] ", manage_ip, manage_port);
                     return [3 /*break*/, 4];
                 case 4:
-                    setTimeout(create_async, 2000, find_ip, find_port, find_tick_time);
+                    setTimeout(create_async, tick_time, manage_ip, manage_port, tick_time);
                     return [2 /*return*/];
             }
         });
@@ -132,3 +240,9 @@ function mem_format(bytes) {
     return (bytes / 1024 / 1024).toFixed(2) + 'MB';
 }
 ;
+///////////////////////////////////////////////////////////////////////////////////////
+exports.SERVER_REQUEST = {
+    REPORT: "/report",
+    FIND: "/find",
+    ALL: "/all"
+};
