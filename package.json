@@ -1,9 +1,10 @@
 {
   "name": "common-manager",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "服务注册相关",
   "main": "dist/index.js",
   "scripts": {
+    "publish": "tsc && npm version patch && npm publish",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
