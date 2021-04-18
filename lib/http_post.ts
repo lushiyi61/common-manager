@@ -32,21 +32,21 @@ export async function http_post_async(host: string, port: number, path: string, 
         },
     };
 
-    let res: HttpReturn = {};
+    let httpReturn: HttpReturn = {};
     await new Promise((resolve, reject) => {
         const req = http.request(opt, function (res) {
             res.setEncoding("utf-8");
             res.on("data", function (chunk) {
-                resolve(Object.assign(res, JSON.parse(chunk)));
+                resolve(Object.assign(httpReturn, JSON.parse(chunk)));
             });
         });
 
         req.on("error", function (err) {
-            res.msg = err.message;
+            httpReturn.msg = err.message;
             reject();
         });
         req.write(JSON.stringify(data));
         req.end();
-    }).catch(() => { logger.warn(res.msg) });
-    return res;
+    }).catch(() => { logger.warn(httpReturn.msg) });
+    return httpReturn;
 };

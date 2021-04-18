@@ -39,9 +39,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.server_report_async = exports.server_update_load = void 0;
 var common_log4js_1 = require("common-log4js");
 var path_1 = require("path");
-var http_post_1 = require("../lib/http_post");
 var logger = common_log4js_1.default.getLogger(path_1.basename(__filename));
 ///////////////////////////////////////////////////////
+var http_post_1 = require("../lib/http_post");
 var api_1 = require("./api");
 // 本服务器信息
 var SERVER_INFO = { server_type: "", server_id: "", tick_time: 0, http_ip: "", http_port: 0, ws_ip: "", ws_port: 0, load: 0, memory: "" };

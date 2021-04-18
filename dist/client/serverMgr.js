@@ -78,6 +78,7 @@ function server_manager_start_async(server_types, manage_ip, manage_port, tick_t
                                     return [4 /*yield*/, http_post_1.http_post_async(manage_ip, manage_port, api_1.SERVER_REQUEST.FIND, findreq)];
                                 case 1:
                                     result = _a.sent();
+                                    logger.debug(result);
                                     if (result.data) {
                                         SERVER_MAP_INFO.set(server_type, result.data);
                                     }
