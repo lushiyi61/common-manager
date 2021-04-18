@@ -39,9 +39,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.post_to_server_async = exports.server_manager_start_async = exports.get_server_by_type = void 0;
 var common_log4js_1 = require("common-log4js");
 var path_1 = require("path");
-var http_post_1 = require("../lib/http_post");
 var logger = common_log4js_1.default.getLogger(path_1.basename(__filename));
 ///////////////////////////////////////////////////////
+var http_post_1 = require("../lib/http_post");
 var api_1 = require("./api");
 // 依赖服务器信息
 var SERVER_MAP_INFO = new Map();
@@ -78,7 +78,6 @@ function server_manager_start_async(server_types, manage_ip, manage_port, tick_t
                                     return [4 /*yield*/, http_post_1.http_post_async(manage_ip, manage_port, api_1.SERVER_REQUEST.FIND, findreq)];
                                 case 1:
                                     result = _a.sent();
-                                    logger.debug(result);
                                     if (result.data) {
                                         SERVER_MAP_INFO.set(server_type, result.data);
                                     }

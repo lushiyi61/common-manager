@@ -40,16 +40,18 @@ var common_log4js_1 = require("common-log4js");
 var path_1 = require("path");
 var logger = common_log4js_1.default.getLogger(path_1.basename(__filename));
 ///////////////////////////////////////////////////////
-var __1 = require("..");
+var serverMgr_1 = require("../client/serverMgr");
+var HALL = "HALL-SERVER";
 (function () { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, __1.server_manager_start_async([
-                    "HALL-SERVER"
-                ], "192.168.1.11", 9000, 50000)];
+            case 0: return [4 /*yield*/, serverMgr_1.server_manager_start_async([
+                    HALL
+                ], "127.0.0.1", 9000, 50000)];
             case 1:
                 _a.sent();
                 logger.info("==========================程序 启动 完毕==========================");
+                logger.debug(serverMgr_1.get_server_by_type(HALL));
                 return [2 /*return*/];
         }
     });

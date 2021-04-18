@@ -52,7 +52,7 @@ var http = require("http");
  */
 function http_post_async(host, port, path, data) {
     return __awaiter(this, void 0, void 0, function () {
-        var opt, res;
+        var opt, httpReturn;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -65,24 +65,24 @@ function http_post_async(host, port, path, data) {
                             "Content-Type": "application/json",
                         },
                     };
-                    res = {};
+                    httpReturn = {};
                     return [4 /*yield*/, new Promise(function (resolve, reject) {
                             var req = http.request(opt, function (res) {
                                 res.setEncoding("utf-8");
                                 res.on("data", function (chunk) {
-                                    resolve(Object.assign(res, JSON.parse(chunk)));
+                                    resolve(Object.assign(httpReturn, JSON.parse(chunk)));
                                 });
                             });
                             req.on("error", function (err) {
-                                res.msg = err.message;
+                                httpReturn.msg = err.message;
                                 reject();
                             });
                             req.write(JSON.stringify(data));
                             req.end();
-                        }).catch(function () { logger.warn(res.msg); })];
+                        }).catch(function () { logger.warn(httpReturn.msg); })];
                 case 1:
                     _a.sent();
-                    return [2 /*return*/, res];
+                    return [2 /*return*/, httpReturn];
             }
         });
     });
