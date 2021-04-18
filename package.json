@@ -1,6 +1,6 @@
 {
   "name": "common-manager",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "服务注册相关",
   "main": "dist/index.js",
   "scripts": {
