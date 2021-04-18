@@ -74,12 +74,12 @@ function http_post_async(host, port, path, data) {
                                 });
                             });
                             req.on("error", function (err) {
-                                // logger.warn(err.message);
-                                reject(res.msg = err.message);
+                                res.msg = err.message;
+                                reject();
                             });
                             req.write(JSON.stringify(data));
                             req.end();
-                        }).catch(function () { })];
+                        }).catch(function () { logger.warn(res.msg); })];
                 case 1:
                     _a.sent();
                     return [2 /*return*/, res];
