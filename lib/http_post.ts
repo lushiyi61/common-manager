@@ -47,6 +47,6 @@ export async function http_post_async(host: string, port: number, path: string, 
         });
         req.write(JSON.stringify(data));
         req.end();
-    }).catch();
+    }).catch(() => { });
     return res;
 };

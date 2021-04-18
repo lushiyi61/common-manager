@@ -79,7 +79,7 @@ function http_post_async(host, port, path, data) {
                             });
                             req.write(JSON.stringify(data));
                             req.end();
-                        }).catch()];
+                        }).catch(function () { })];
                 case 1:
                     _a.sent();
                     return [2 /*return*/, res];
