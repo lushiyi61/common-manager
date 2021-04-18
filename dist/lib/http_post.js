@@ -73,7 +73,7 @@ function http_post_async(host, port, path, data) {
                         });
                         req.on("error", function (err) {
                             logger.warn(err.message);
-                            reject({ code: undefined });
+                            // reject({ code: undefined });
                         });
                         req.write(JSON.stringify(data));
                         req.end();

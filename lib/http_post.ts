@@ -43,7 +43,7 @@ export async function http_post_async(host: string, port: number, path: string, 
 
             req.on("error", function (err) {
                 logger.warn(err.message);
-                reject({ code: undefined });
+                // reject({ code: undefined });
             });
             req.write(JSON.stringify(data));
             req.end();
