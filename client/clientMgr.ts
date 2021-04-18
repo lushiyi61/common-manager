@@ -49,7 +49,7 @@ async function create_async(manage_ip: string, manage_port: number, tick_time: n
         try {
             await http_post_async(manage_ip, manage_port, SERVER_REQUEST.REPORT, SERVER_INFO);
         } catch (error) {
-            logger.warn("cann't connect to find server. ip:[%s] port:[%s] ", manage_ip, manage_port);
+            logger.warn("cann't connect to manage server. ip:[%s] port:[%s] ", manage_ip, manage_port);
         }
     }
     setTimeout(create_async, tick_time, manage_ip, manage_port, tick_time);
