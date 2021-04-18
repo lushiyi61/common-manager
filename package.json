@@ -4,7 +4,7 @@
   "description": "服务注册相关",
   "main": "dist/index.js",
   "scripts": {
-    "publish": "tsc && npm version patch && npm publish && exit 1",
+    "patch": "tsc && npm version patch",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

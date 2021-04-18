@@ -63,26 +63,20 @@ function http_post_async(host, port, path, data) {
                     "Content-Type": "application/json",
                 },
             };
-            try {
-                return [2 /*return*/, new Promise(function (resolve, reject) {
-                        var req = http.request(opt, function (res) {
-                            res.setEncoding("utf-8");
-                            res.on("data", function (chunk) {
-                                resolve(JSON.parse(chunk));
-                            });
+            return [2 /*return*/, new Promise(function (resolve, reject) {
+                    var req = http.request(opt, function (res) {
+                        res.setEncoding("utf-8");
+                        res.on("data", function (chunk) {
+                            resolve(JSON.parse(chunk));
                         });
-                        req.on("error", function (err) {
-                            logger.warn(err.message);
-                            // reject({ code: undefined });
-                        });
-                        req.write(JSON.stringify(data));
-                        req.end();
-                    })];
-            }
-            catch (error) {
-                return [2 /*return*/, { code: undefined }];
-            }
-            return [2 /*return*/];
+                    });
+                    req.on("error", function (err) {
+                        logger.warn(err.message);
+                        reject({ msg: err.message });
+                    });
+                    req.write(JSON.stringify(data));
+                    req.end();
+                })];
         });
     });
 }

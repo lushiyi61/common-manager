@@ -110,7 +110,7 @@ function create_async(manage_ip, manage_port, tick_time) {
                     return [3 /*break*/, 4];
                 case 3:
                     error_1 = _a.sent();
-                    logger.warn("cann't connect to find server. ip:[%s] port:[%s] ", manage_ip, manage_port);
+                    logger.warn("cann't connect to manage server. ip:[%s] port:[%s] ", manage_ip, manage_port);
                     return [3 /*break*/, 4];
                 case 4:
                     setTimeout(create_async, tick_time, manage_ip, manage_port, tick_time);
