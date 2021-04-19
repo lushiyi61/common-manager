@@ -19,6 +19,7 @@ export interface IServerReq {
 }
 
 export interface IServerRes {
+    server_type: string,
     server_id: string,      // 服务ID
     http_ip: string,
     http_port: number,
