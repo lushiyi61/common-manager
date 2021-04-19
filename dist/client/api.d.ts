@@ -15,6 +15,7 @@ export interface IServerReq {
     memory: string;
 }
 export interface IServerRes {
+    server_type: string;
     server_id: string;
     http_ip: string;
     http_port: number;
