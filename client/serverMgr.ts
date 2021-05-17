@@ -34,14 +34,18 @@ export async function server_manager_start_async(server_types: string[], manage_
                 findreq.server_id = server.server_id;
             }
 
-            const result: HttpReturn = await http_post_async(
-                manage_ip,
-                manage_port,
-                SERVER_REQUEST.FIND,
-                findreq
-            )
-            if (result.data) {
-                SERVER_MAP_INFO.set(server_type, result.data);
+            try {
+                const result: HttpReturn = await http_post_async(
+                    manage_ip,
+                    manage_port,
+                    SERVER_REQUEST.FIND,
+                    findreq
+                )
+                if (result.data) {
+                    SERVER_MAP_INFO.set(server_type, result.data);
+                }
+            } catch (error) {
+                logger.error(error);
             }
         })
     )
