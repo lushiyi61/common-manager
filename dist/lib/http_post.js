@@ -79,10 +79,8 @@ function http_post_async(host, port, path, data) {
                             });
                             req.write(JSON.stringify(data));
                             req.end();
-                        }).catch(function () { logger.warn(httpReturn.msg); })];
-                case 1:
-                    _a.sent();
-                    return [2 /*return*/, httpReturn];
+                        })];
+                case 1: return [2 /*return*/, _a.sent()];
             }
         });
     });

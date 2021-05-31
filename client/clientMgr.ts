@@ -7,7 +7,18 @@ import { IServerReq, SERVER_REQUEST } from "./api";
 
 
 // 本服务器信息
-const SERVER_INFO: IServerReq = { server_type: "", server_id: "", tick_time: 0, http_ip: "", http_port: 0, ws_ip: "", ws_port: 0, load: 0, memory: "" };
+const SERVER_INFO: IServerReq = {
+    server_type: "",
+    server_id: "",
+    tick_time: 0,
+    http_ip: "",
+    http_port: 0,
+    ws_ip: "",
+    ws_port: 0,
+    load: 0,
+    memory: "",
+    remark: "",
+};
 
 /**
  * 更新本服务负载

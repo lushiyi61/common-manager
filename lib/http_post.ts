@@ -33,7 +33,7 @@ export async function http_post_async(host: string, port: number, path: string, 
     };
 
     let httpReturn: HttpReturn = {};
-    await new Promise((resolve, reject) => {
+    return await new Promise((resolve, reject) => {
         const req = http.request(opt, function (res) {
             res.setEncoding("utf-8");
             res.on("data", function (chunk) {
@@ -47,6 +47,5 @@ export async function http_post_async(host: string, port: number, path: string, 
         });
         req.write(JSON.stringify(data));
         req.end();
-    }).catch(() => { logger.warn(httpReturn.msg) });
-    return httpReturn;
+    });
 };

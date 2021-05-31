@@ -44,7 +44,18 @@ var logger = common_log4js_1.default.getLogger(path_1.basename(__filename));
 var http_post_1 = require("../lib/http_post");
 var api_1 = require("./api");
 // 本服务器信息
-var SERVER_INFO = { server_type: "", server_id: "", tick_time: 0, http_ip: "", http_port: 0, ws_ip: "", ws_port: 0, load: 0, memory: "" };
+var SERVER_INFO = {
+    server_type: "",
+    server_id: "",
+    tick_time: 0,
+    http_ip: "",
+    http_port: 0,
+    ws_ip: "",
+    ws_port: 0,
+    load: 0,
+    memory: "",
+    remark: "",
+};
 /**
  * 更新本服务负载
  * @param load

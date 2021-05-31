@@ -16,6 +16,7 @@ export interface IServerReq {
     ws_port: number,
     load: number,           // 负载
     memory: string,         // JSON 字符串
+    remark: string,         // 备注
 }
 
 export interface IServerRes {
@@ -25,6 +26,7 @@ export interface IServerRes {
     http_port: number,
     ws_ip: string,
     ws_port: number,
+    remark: string,         // 备注
 }
 
 

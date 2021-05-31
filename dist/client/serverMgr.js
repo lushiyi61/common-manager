@@ -64,7 +64,7 @@ function server_manager_start_async(server_types, manage_ip, manage_port, tick_t
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0: return [4 /*yield*/, Promise.all(server_types.map(function (server_type) { return __awaiter(_this, void 0, void 0, function () {
-                        var findreq, server, result;
+                        var findreq, server, result, error_1;
                         return __generator(this, function (_a) {
                             switch (_a.label) {
                                 case 0:
@@ -75,13 +75,21 @@ function server_manager_start_async(server_types, manage_ip, manage_port, tick_t
                                     if (server) {
                                         findreq.server_id = server.server_id;
                                     }
-                                    return [4 /*yield*/, http_post_1.http_post_async(manage_ip, manage_port, api_1.SERVER_REQUEST.FIND, findreq)];
+                                    _a.label = 1;
                                 case 1:
+                                    _a.trys.push([1, 3, , 4]);
+                                    return [4 /*yield*/, http_post_1.http_post_async(manage_ip, manage_port, api_1.SERVER_REQUEST.FIND, findreq)];
+                                case 2:
                                     result = _a.sent();
                                     if (result.data) {
                                         SERVER_MAP_INFO.set(server_type, result.data);
                                     }
-                                    return [2 /*return*/];
+                                    return [3 /*break*/, 4];
+                                case 3:
+                                    error_1 = _a.sent();
+                                    logger.error(error_1);
+                                    return [3 /*break*/, 4];
+                                case 4: return [2 /*return*/];
                             }
                         });
                     }); }))];

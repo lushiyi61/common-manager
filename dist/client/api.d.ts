@@ -13,6 +13,7 @@ export interface IServerReq {
     ws_port: number;
     load: number;
     memory: string;
+    remark: string;
 }
 export interface IServerRes {
     server_type: string;
@@ -21,6 +22,7 @@ export interface IServerRes {
     http_port: number;
     ws_ip: string;
     ws_port: number;
+    remark: string;
 }
 export interface IFindReq {
     server_type: string;
